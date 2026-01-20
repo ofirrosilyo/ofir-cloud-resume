@@ -5,7 +5,6 @@ import redis
 app = Flask(__name__)
 CORS(app)
 
-# Connect to the Redis service
 r = redis.Redis(host="redis-db", port=6379, decode_responses=True)
 
 @app.route("/visit")
