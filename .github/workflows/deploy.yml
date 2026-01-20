@@ -1,0 +1,25 @@
+name: K3s Auto-Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update Kubernetes Resume
+        run: |
+          sudo kubectl delete configmap resume-content --ignore-not-found
+          sudo kubectl create configmap resume-content --from-file=index.html
+          sudo kubectl rollout restart deployment resume-deployment
+
+      - name: Update Kubernetes API
+        run: |
+          sudo kubectl delete configmap api-code --ignore-not-found
+          sudo kubectl create configmap api-code --from-file=api-app.py
+          sudo kubectl rollout restart deployment resume-api
