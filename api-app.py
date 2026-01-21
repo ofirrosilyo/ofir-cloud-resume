@@ -5,7 +5,13 @@ import redis
 app = Flask(__name__)
 CORS(app)
 
+# Connect to Redis
 r = redis.Redis(host="redis-db", port=6379, decode_responses=True)
+
+@app.route("/health")
+def health():
+    """Health check route for Kubernetes liveness and readiness probes"""
+    return jsonify({"status": "ok"}), 200
 
 @app.route("/visit")
 def hit():
