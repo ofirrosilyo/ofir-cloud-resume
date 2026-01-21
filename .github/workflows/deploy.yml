@@ -2,23 +2,34 @@ name: K3s Auto-Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update Kubernetes Resume
-        run: |
-          sudo kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml delete configmap resume-content --ignore-not-found
-          sudo kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml create configmap resume-content --from-file=index.html
-          sudo kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml rollout restart deployment resume-deployment
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Update API Code ConfigMap
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/resume-api:latest
+
+      - name: Update Kubernetes Resources
         run: |
-          sudo kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml delete configmap api-code --ignore-not-found
-          sudo kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml create configmap api-code --from-file=api-app.py
+          export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+          # Update the code files via ConfigMaps
+          sudo kubectl create configmap resume-content --from-file=index.html -o yaml --dry-run=client | sudo kubectl apply -f -
+          sudo kubectl create configmap api-code --from-file=api-app.py -o yaml --dry-run=client | sudo kubectl apply -f -
+          # Force the pods to use the new Docker image AND the new ConfigMap code
+          sudo kubectl rollout restart deployment resume-deployment
+          sudo kubectl rollout restart deployment resume-api
