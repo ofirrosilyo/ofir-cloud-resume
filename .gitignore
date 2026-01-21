@@ -1,0 +1,6 @@
+.*
+!/.github
+!/.gitignore
+*.log
+_diag/
+_work/
