@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-allow-only-api
+spec:
+  podSelector:
+    matchLabels:
+      app: redis-db  # Protect the Redis pod
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: resume-api # Only allow the API
+    ports:
+    - protocol: TCP
+      port: 6379

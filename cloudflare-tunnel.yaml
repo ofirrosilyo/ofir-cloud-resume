@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+      - name: cloudflared
+        image: cloudflare/cloudflared:latest
+        args:
+        - tunnel
+        - "--no-autoupdate"
+        - run
+        - --token
+        - "eyJhIjoiMTQ5Mjk2OGVlMWM5ZTBmMzZkN2I5NzdlM2NkZmI4NDkiLCJ0IjoiY2RhMzFmMWItYjc4YS00YzVlLTkzMmYtYTE1ZmEyZjE3YjhiIiwicyI6Ik1XVTRPVGxpWkRBdE4ySm1OUzAwT0RGbUxXRmxOelV0TmpnNE1HRTJObUU0WmprMSJ9"
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
