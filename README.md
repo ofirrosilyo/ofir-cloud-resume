@@ -1,8 +1,13 @@
 # Cloud-Native Resume Infrastructure 🚀
 
+![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+
 A production-grade, highly available personal resume website hosted on a private **K3s (Kubernetes)** cluster, secured by **Cloudflare Zero Trust**, and managed via **GitOps** principles.
 
-## 🏗️ Architecture Overivew
+## 🏗️ Architecture Overview
 The infrastructure is designed for security and scalability, bypassing the need for open inbound ports or public IP exposure.
 
 
