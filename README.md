@@ -1,5 +1,6 @@
 # Cloud-Native Resume Infrastructure 🚀
 
+![Build Status](https://github.com/ofirrosilyo/ofir-cloud-resume/actions/workflows/k8s-validate.yaml/badge.svg)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
