@@ -12,4 +12,4 @@ jobs:
       - name: Validate Kubernetes YAMLs
         uses: stefanprodan/kube-tools@v1
         with:
-          command: kubeval k8s/base --ignore-missing-schemas
+          command: kubeval --ignore-missing-schemas -d .
