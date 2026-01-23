@@ -4,6 +4,11 @@ on:
   push:
     branches: [ main ]
 
+# This prevents two deploys from fighting each other
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: self-hosted
@@ -25,15 +30,21 @@ jobs:
         with:
           context: .
           push: true
+          # Note: In the future, using a unique tag like ${{ github.sha }} 
+          # is more "Pro" than 'latest' for Zero Trust rollbacks.
           tags: ${{ secrets.DOCKER_USERNAME }}/resume-api:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Update Kubernetes Resources
         run: |
+          # Use sudo -E to pass the KUBECONFIG variable into the sudo environment
           export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-          # 1. Update Frontend (Still using ConfigMap for simplicity on static HTML)
-          sudo kubectl create configmap resume-content --from-file=index.html -o yaml --dry-run=client | sudo kubectl apply -f -
-          sudo kubectl rollout restart deployment resume-deployment
-          # 2. Update API (The Industry Way: Pulling the new baked-in image)
-          sudo kubectl rollout restart deployment resume-api
+          
+          # 1. Update Frontend
+          sudo -E kubectl create configmap resume-content --from-file=index.html -o yaml --dry-run=client | sudo -E kubectl apply -f -
+          sudo -E kubectl rollout restart deployment resume-deployment
+          
+          # 2. Update API 
+          # This forces K3s to pull the new 'latest' image we just pushed
+          sudo -E kubectl rollout restart deployment resume-api
