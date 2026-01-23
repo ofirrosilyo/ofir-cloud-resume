@@ -29,19 +29,22 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/resume-api:latest
+          # INDUSTRY STANDARD: Tag with BOTH 'latest' and the specific Commit SHA
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/resume-api:latest
+            ${{ secrets.DOCKER_USERNAME }}/resume-api:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Update Kubernetes Resources
         run: |
-          # Defining the config path as a variable for the script
           K3S_CONFIG="/etc/rancher/k3s/k3s.yaml"
           
-          # 1. Update Frontend
-          # We pass the kubeconfig path directly to each kubectl command using --kubeconfig
+          # 1. Update Frontend (ConfigMap remains the same)
           sudo kubectl --kubeconfig=$K3S_CONFIG create configmap resume-content --from-file=index.html -o yaml --dry-run=client | sudo kubectl --kubeconfig=$K3S_CONFIG apply -f -
           sudo kubectl --kubeconfig=$K3S_CONFIG rollout restart deployment resume-deployment
           
-          # 2. Update API
-          sudo kubectl --kubeconfig=$K3S_CONFIG rollout restart deployment resume-api
+          # 2. Update API (INDUSTRY STANDARD: Explicitly set the new SHA-tagged image)
+          # This ensures K3s pulls the EXACT code you just committed.
+          sudo kubectl --kubeconfig=$K3S_CONFIG set image deployment/resume-api \
+            resume-api=${{ secrets.DOCKER_USERNAME }}/resume-api:${{ github.sha }}
