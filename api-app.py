@@ -25,11 +25,20 @@ def health():
 @app.route("/visit")
 def hit():
     try:
-        # Get real visitor IP from Traefik
-        visitor_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+        # 1. Properly extract the FIRST IP from the forwarded header
+        x_forwarded = request.headers.get('X-Forwarded-For')
+        if x_forwarded:
+            # Splits "IP1, IP2" and takes "IP1"
+            visitor_ip = x_forwarded.split(',')[0].strip()
+        else:
+            visitor_ip = request.remote_addr
+
+        # DEBUG: Add this so you can see the real IP in 'kubectl logs'
+        print(f"Request from: {visitor_ip}")
+
         current_wan = get_my_current_wan()
         
-        # Zero Trust logic: verify if requester is YOU
+        # 2. Zero Trust check
         is_home = (
             visitor_ip.startswith("192.168.50.") or 
             visitor_ip == "127.0.0.1" or 
@@ -40,18 +49,18 @@ def hit():
             count = r.incr("hits")
             return jsonify({"hits": int(count), "type": "admin"})
 
-        # Rate limiting logic for external traffic
+        # 3. Rate limiting for external traffic
         lock_key = f"limit:{visitor_ip}"
         is_new = r.set(lock_key, "1", ex=86400, nx=True)
 
         if is_new:
             count = r.incr("hits")
         else:
-            count = r.get("hits") or 0
+            # Handle case where Redis might return None
+            val = r.get("hits")
+            count = int(val) if val else 0
             
-        return jsonify({"hits": int(count), "type": "external"})
+        return jsonify({"hits": count, "type": "external"})
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
