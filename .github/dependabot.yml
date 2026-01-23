@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "pip" # Checks requirements.txt
+    directory: "/"
+    schedule:
+      interval: "weekly" # Check every week
+    open-pull-requests-limit: 5
+    groups:
+      python-dependencies:
+        patterns:
+          - "*" # Group all updates into one PR to avoid noise
+
+  - package-ecosystem: "docker" # Checks your Dockerfile base image
+    directory: "/"
+    schedule:
+      interval: "weekly"
