@@ -25,20 +25,24 @@ def health():
 @app.route("/visit")
 def hit():
     try:
-        # 1. Properly extract the FIRST IP from the forwarded header
+        # 1. Get IP safely
         x_forwarded = request.headers.get('X-Forwarded-For')
         if x_forwarded:
-            # Splits "IP1, IP2" and takes "IP1"
             visitor_ip = x_forwarded.split(',')[0].strip()
         else:
             visitor_ip = request.remote_addr
 
-        # DEBUG: Add this so you can see the real IP in 'kubectl logs'
-        print(f"Request from: {visitor_ip}")
+        # Log it so we can see it in 'kubectl logs'
+        print(f"Processing visit from: {visitor_ip}")
 
-        current_wan = get_my_current_wan()
-        
-        # 2. Zero Trust check
+        # 2. WAN check with a 'None' fallback so it never crashes
+        current_wan = None
+        try:
+            current_wan = get_my_current_wan()
+        except:
+            print("Warning: Could not fetch WAN IP")
+
+        # 3. Admin Check
         is_home = (
             visitor_ip.startswith("192.168.50.") or 
             visitor_ip == "127.0.0.1" or 
@@ -49,18 +53,20 @@ def hit():
             count = r.incr("hits")
             return jsonify({"hits": int(count), "type": "admin"})
 
-        # 3. Rate limiting for external traffic
+        # 4. External visitor logic
         lock_key = f"limit:{visitor_ip}"
         is_new = r.set(lock_key, "1", ex=86400, nx=True)
 
+        # Safely get count from Redis
+        raw_count = r.get("hits")
+        current_count = int(raw_count) if raw_count else 0
+
         if is_new:
-            count = r.incr("hits")
-        else:
-            # Handle case where Redis might return None
-            val = r.get("hits")
-            count = int(val) if val else 0
-            
-        return jsonify({"hits": count, "type": "external"})
+            current_count = r.incr("hits")
+        
+        return jsonify({"hits": int(current_count), "type": "external"})
+
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
+        # This will print the EXACT error to your 'kubectl logs'
+        print(f"CRITICAL ERROR: {str(e)}")
+        return jsonify({"error": "Internal Server Error"}), 500
