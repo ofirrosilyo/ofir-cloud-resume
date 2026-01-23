@@ -14,11 +14,13 @@ spec:
     spec:
       containers:
       - name: resume-api
-        # Updated to :latest to match your GitHub Action
+        # This tag is overridden by your GitHub Action (set image)
         image: ofirrosilyo/resume-api:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
+        
+        # 1. Resource Guardrails
         resources:
           requests:
             memory: "64Mi"
@@ -26,21 +28,37 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
+
+        # 2. Optimized Probes
+        # StartupProbe: Best practice to handle slow starts without affecting Liveness
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          failureThreshold: 6 # Will try for 30 seconds (6 * 5s)
+          periodSeconds: 5
+        
         livenessProbe:
           httpGet:
             path: /health
             port: 5000
-          initialDelaySeconds: 10
           periodSeconds: 15
+        
         readinessProbe:
           httpGet:
             path: /health
             port: 5000
-          initialDelaySeconds: 5
           periodSeconds: 10
+
+        # 3. Industry Standard Environment Handling
         env:
+        # Hostnames are NOT secrets. Putting them in plain text makes 
+        # troubleshooting 10x faster.
         - name: REDIS_HOST
-          valueFrom:
-            secretKeyRef:
-              name: api-env-config
-              key: REDIS_HOST
+          value: "redis-db"
+        # Only use secrets for ACTUAL secrets (e.g. if Redis had a password)
+        # - name: REDIS_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: api-env-config
+        #       key: REDIS_PASSWORD
