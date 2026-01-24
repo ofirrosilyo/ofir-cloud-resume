@@ -1,78 +1,43 @@
 apiVersion: v1
+kind: List
 items:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"resume-service","namespace":"default"},"spec":{"ports":[{"name":"cloudflare-port","port":8081,"protocol":"TCP","targetPort":5000}],"selector":{"app":"resume-api"},"type":"LoadBalancer"}}
-    creationTimestamp: "2026-01-21T22:00:39Z"
-    finalizers:
-    - service.kubernetes.io/load-balancer-cleanup
     name: resume-service
-    namespace: default
-    resourceVersion: "152163"
-    uid: 7f69791e-65da-45a6-8b16-8152f2150d15
   spec:
-    allocateLoadBalancerNodePorts: true
-    clusterIP: 10.43.220.24
-    clusterIPs:
-    - 10.43.220.24
-    externalTrafficPolicy: Cluster
-    internalTrafficPolicy: Cluster
-    ipFamilies:
-    - IPv4
-    ipFamilyPolicy: SingleStack
-    ports:
-    - name: cloudflare-port
-      nodePort: 30545
-      port: 8081
-      protocol: TCP
-      targetPort: 5000
+    type: LoadBalancer
     selector:
       app: resume-api
-    sessionAffinity: None
-    type: LoadBalancer
-  status:
-    loadBalancer:
-      ingress:
-      - ip: 192.168.50.186
-        ipMode: VIP
+    ports:
+    - name: cloudflare-port
+      port: 8081
+      targetPort: 5000
+      protocol: TCP
+
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"resume-frontend-service","namespace":"default"},"spec":{"ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"resume"},"type":"LoadBalancer"}}
-    creationTimestamp: "2026-01-21T22:11:51Z"
-    finalizers:
-    - service.kubernetes.io/load-balancer-cleanup
     name: resume-frontend-service
-    namespace: default
-    resourceVersion: "152145"
-    uid: 60d8d0a8-b04b-492c-b3fd-d704a8c520a2
   spec:
-    allocateLoadBalancerNodePorts: true
-    clusterIP: 10.43.48.113
-    clusterIPs:
-    - 10.43.48.113
-    externalTrafficPolicy: Cluster
-    internalTrafficPolicy: Cluster
-    ipFamilies:
-    - IPv4
-    ipFamilyPolicy: SingleStack
-    ports:
-    - name: http
-      nodePort: 30671
-      port: 80
-      protocol: TCP
-      targetPort: 80
+    type: LoadBalancer
     selector:
       app: resume
-    sessionAffinity: None
-    type: LoadBalancer
-  status:
-    loadBalancer: {}
-kind: List
-metadata:
-  resourceVersion: ""
+    ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: redis-db
+  spec:
+    type: ClusterIP
+    selector:
+      app: redis-db
+    ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
