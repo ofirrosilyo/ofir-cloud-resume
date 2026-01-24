@@ -4,18 +4,34 @@ import redis
 import requests
 import os
 import sys
+import time
 
 app = Flask(__name__)
 CORS(app)
 
-# Use REDIS_HOST from Env (Industry Standard)
+# Use REDIS_HOST from Env
 REDIS_HOST = os.getenv("REDIS_HOST", "redis-db")
-try:
-    r = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True, socket_timeout=2)
-    r.ping() # Verify connection immediately
-except Exception as e:
-    print(f"REDIS ERROR ON STARTUP: {e}")
-    sys.exit(1)
+
+# Industry Standard: Retry connection loop
+r = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True)
+
+def connect_redis():
+    retry_count = 5
+    while retry_count > 0:
+        try:
+            r.ping()
+            print("Successfully connected to Redis")
+            return True
+        except Exception as e:
+            print(f"Redis not ready... retrying in 2s ({retry_count} attempts left). Error: {e}")
+            time.sleep(2)
+            retry_count -= 1
+    return False
+
+if not connect_redis():
+    print("CRITICAL: Could not connect to Redis after retries.")
+    # We don't exit(1) here so the health check can still report 'ok' 
+    # but the logs will show us the truth.
 
 def get_my_current_wan():
     try:
