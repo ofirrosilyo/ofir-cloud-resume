@@ -12,9 +12,15 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: redis # <--- Double check: run 'kubectl get pods --show-labels' to confirm
-  port: 6379
-  proxyProtocol: opaque
+      app: redis-db
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: resume-api
+    ports:
+    - protocol: TCP
+      port: 6379
 ---
 apiVersion: policy.linkerd.io/v1alpha1
 kind: MeshTLSAuthentication
