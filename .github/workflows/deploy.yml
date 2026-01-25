@@ -36,15 +36,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Update Kubernetes Resources
+- name: Update Kubernetes Resources
         run: |
           K3S_CONFIG="/etc/rancher/k3s/k3s.yaml"
-          
-          # 1. Update Frontend (ConfigMap remains the same)
-          sudo kubectl --kubeconfig=$K3S_CONFIG create configmap resume-content --from-file=index.html -o yaml --dry-run=client | sudo kubectl --kubeconfig=$K3S_CONFIG apply -f -
-          sudo kubectl --kubeconfig=$K3S_CONFIG rollout restart deployment resume-deployment
-          
-          # 2. Update API (INDUSTRY STANDARD: Explicitly set the new SHA-tagged image)
-          # This ensures K3s pulls the EXACT code you just committed.
+
+          # Use Kustomize to apply EVERYTHING in your k8s/base folder
+          sudo kubectl --kubeconfig=$K3S_CONFIG apply -k k8s/base/
+
+          # Update the API to the specific image we just built
           sudo kubectl --kubeconfig=$K3S_CONFIG set image deployment/resume-api \
             resume-api=${{ secrets.DOCKER_USERNAME }}/resume-api:${{ github.sha }}
+
+          # Force a restart of the frontend to pick up the new ConfigMap name
+          sudo kubectl --kubeconfig=$K3S_CONFIG rollout restart deployment resume-deployment
