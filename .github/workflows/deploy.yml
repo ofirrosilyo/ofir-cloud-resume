@@ -36,7 +36,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-       - name: Update Kubernetes Resources
+      - name: Update Kubernetes Resources
         run: |
           K3S_CONFIG="/etc/rancher/k3s/k3s.yaml"
 
