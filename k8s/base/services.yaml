@@ -22,7 +22,7 @@ items:
   spec:
     type: LoadBalancer
     selector:
-      app: resume
+      app: resume-api
     ports:
     - name: http
       port: 80
