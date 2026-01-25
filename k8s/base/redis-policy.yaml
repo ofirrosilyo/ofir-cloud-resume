@@ -1,16 +1,24 @@
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
+apiVersion: policy.linkerd.io/v1beta3
+kind: Server
 metadata:
-  name: redis-allow-only-api
+  name: redis-server
 spec:
   podSelector:
     matchLabels:
-      app: redis-db  # Protect the Redis pod
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          app: resume-api # Only allow the API
-    ports:
-    - protocol: TCP
-      port: 6379
+      app: redis-db
+  port: 6379
+  proxyProtocol: opaque
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: redis-access-policy
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: redis-server
+  requiredAuthenticationRefs:
+    - name: api-auth-mtls
+      kind: MeshTLSAuthentication
+      group: policy.linkerd.io

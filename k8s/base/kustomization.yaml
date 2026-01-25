@@ -5,9 +5,9 @@ resources:
   - api-auth.yaml
   - api-deployment.yaml
   - frontend-deployment.yaml
-  - frontend-service.yaml
   - redis-deployment.yaml
   - redis-policy.yaml
+  - services.yaml
   - tunnel-connector.yaml
 
 configMapGenerator:

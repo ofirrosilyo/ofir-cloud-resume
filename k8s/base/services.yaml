@@ -22,7 +22,7 @@ items:
   spec:
     type: LoadBalancer
     selector:
-      app: resume-api
+      app: resume  # <--- FIXED: Now points to Nginx pods
     ports:
     - name: http
       port: 80
