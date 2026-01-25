@@ -19,6 +19,13 @@ spec:
         command: ["redis-server", "--appendonly", "yes", "--protected-mode", "no", "--bind", "0.0.0.0"]
         ports:
         - containerPort: 6379
+        resources:
+         requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
         volumeMounts:
         - name: data
           mountPath: /data
