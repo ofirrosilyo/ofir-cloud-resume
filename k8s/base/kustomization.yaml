@@ -2,15 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - api-auth.yaml
-  - api-deployment.yaml
-  - frontend-deployment.yaml
-  - redis-deployment.yaml
-  - redis-policy.yaml
-  - services.yaml
+  - components/api
+  - components/redis
+  - components/frontend
+  - components/services.yaml
   - tunnel-connector.yaml
-
-configMapGenerator:
-- name: resume-content
-  files:
-    - index.html=index.html

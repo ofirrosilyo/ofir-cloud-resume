@@ -1,0 +1,7 @@
+resources:
+  - frontend-deployment.yaml
+
+configMapGenerator:
+- name: resume-content
+  files:
+    - index.html=index.html
