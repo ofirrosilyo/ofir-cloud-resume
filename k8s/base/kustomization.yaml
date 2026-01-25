@@ -8,10 +8,9 @@ resources:
   - frontend-service.yaml
   - redis-deployment.yaml
   - redis-policy.yaml
-  - services.yaml
   - tunnel-connector.yaml
 
 configMapGenerator:
 - name: resume-content
   files:
-    - index.html=../../index.html
+    - index.html=index.html

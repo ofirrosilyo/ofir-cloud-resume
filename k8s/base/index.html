@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofir Rosilyo - CV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header .title {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.95em;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0;
+        }
+        
+        .left-column {
+            padding: 40px;
+        }
+        
+        .right-column {
+            background: #f8f9fa;
+            padding: 40px 30px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            font-weight: 600;
+        }
+        
+        .job {
+            margin-bottom: 25px;
+        }
+        
+        .job-header {
+            margin-bottom: 10px;
+        }
+        
+        .job-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .company {
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .date {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        .job ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .job li {
+            margin-bottom: 6px;
+            color: #555;
+        }
+        
+        .skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .skill-category {
+            margin-bottom: 15px;
+        }
+        
+        .skill-category-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            background: #e8f4f8;
+            color: #2c3e50;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            border: 1px solid #d0e8f0;
+        }
+        
+        .education-item {
+            margin-bottom: 20px;
+        }
+        
+        .degree {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .institution {
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+        
+        .summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 35px;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ofir Rosilyo</h1>
+            <div class="title">Technical Support Engineer | Cloud Infrastructure Specialist</div>
+            <div class="contact-info">
+                <div class="contact-item">📧 ofir.rosilyo@gmail.com</div>
+                <div class="contact-item">📱 +351 968 690 764</div>
+                <div class="contact-item">💬 +972 544 993 979 (WhatsApp)</div>
+                <div class="contact-item">📍 Funchal, Portugal</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-column">
+                <div class="summary">
+                    Independent Technical Support Engineer with 8+ years of experience in cloud infrastructure, troubleshooting, and customer support. Specialized in AWS, Azure, WordPress, and monitoring tools with a proven track record of resolving complex technical issues across multiple platforms.
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Professional Experience</h2>
+                    
+                    <div class="job">
+                        <div class="job-header">
+                            <div class="job-title">Independent Technical Consultant</div>
+                            <div class="date">2017 - Present</div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <div class="company">Level 1 & 2 Technical Support Engineer - Drove</div>
+                            <div class="date">2017 - Present</div>
+                            <ul>
+                                <li>Provide multi-channel support via phone, chat, and ticketing systems</li>
+                                <li>Manage and resolve technical issues using JIRA workflow</li>
+                                <li>Troubleshoot WordPress and WooCommerce implementations</li>
+                                <li>Support AWS and Azure cloud infrastructure</li>
+                                <li>Utilize monitoring tools including Kibana and Kubernetes</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <div class="company">Website Engineer - TechDeal</div>
+                            <div class="date">2017 - 2023</div>
+                            <ul>
+                                <li>Developed and maintained WordPress and WooCommerce solutions</li>
+                                <li>Provided Level 2 & 3 technical support</li>
+                                <li>Managed online customer support operations</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="job">
+                        <div class="job-header">
+                            <div class="job-title">Senior Account Manager - Self Serve Team</div>
+                            <div class="company">Supersonic</div>
+                            <div class="date">2015 - 2016</div>
+                        </div>
+                        <ul>
+                            <li><strong>Automated 80% of incoming tickets</strong>, reducing ticket resolution time by 66% and significantly improving team efficiency</li>
+                            <li>Managed Self Serve Platform operations and workflows</li>
+                            <li>Established SLAs and standardized team procedures</li>
+                            <li>Collaborated with R&D to enhance platform functionality</li>
+                            <li>Provided Level 1-2 technical support and team training</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="job">
+                        <div class="job-header">
+                            <div class="job-title">Account Manager - Video Team</div>
+                            <div class="company">SupersonicAds</div>
+                            <div class="date">2013 - 2015</div>
+                        </div>
+                        <ul>
+                            <li>Managed Video Network accounts and product issues</li>
+                            <li>Maintained advertiser relationships and handled product requests</li>
+                            <li>Drove business development and client acquisition</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="job">
+                        <div class="job-header">
+                            <div class="job-title">Video Account Trafficker</div>
+                            <div class="company">SupersonicAds</div>
+                            <div class="date">2012 - 2013</div>
+                        </div>
+                        <ul>
+                            <li>Managed and optimized Video Network campaigns</li>
+                            <li>Implemented and troubleshot API and XML integrations</li>
+                            <li>Resolved tracking issues (Pixel, Cookie, S2S)</li>
+                            <li>Provided Level 2 integration support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Education</h2>
+                    
+                    <div class="education-item">
+                        <div class="degree">M.B.A. - Business Management, Marketing and Big Data</div>
+                        <div class="institution">Tel Aviv University (TAU)</div>
+                        <div class="date">2015 - 2017</div>
+                    </div>
+                    
+                    <div class="education-item">
+                        <div class="degree">B.A. - Business Management, Marketing and Finance</div>
+                        <div class="institution">Hamaslool Ha'akademi Hamichlala Leminhal</div>
+                        <div class="date">2009 - 2012</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="section">
+                    <h2 class="section-title">Technical Skills</h2>
+                    
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <div class="skill-category-title">Cloud Platforms</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">AWS</span>
+                                <span class="skill-tag">Azure</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Tools & Platforms</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Kubernetes</span>
+                                <span class="skill-tag">Kibana</span>
+                                <span class="skill-tag">JIRA</span>
+                                <span class="skill-tag">Zendesk</span>
+                                <span class="skill-tag">WordPress</span>
+                                <span class="skill-tag">WooCommerce</span>
+                            </div>
+                        </div>
+
+                        <div class="skill-category">
+                            <div class="skill-category-title">Homelab Infrastructure</div>
+                            <div class="skill-tags" style="display: block; background: #e8f4f8; padding: 12px; border-radius: 8px; border: 1px solid #d0e8f0; font-size: 0.85em;">
+                                <div style="margin-bottom: 5px;"><strong>Stack:</strong> K3s, Redis, Python</div>
+                                <div style="margin-bottom: 5px;"><strong>Status:</strong> <span style="color: #27ae60;">● Online</span></div>
+                                <div><strong>Total Views:</strong> <span id="count" style="font-weight: bold; color: #3498db;">Loading...</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Programming</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">SQL</span>
+                                <span class="skill-tag">HTML/CSS</span>
+                                <span class="skill-tag">YAML</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">Operating Systems</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Linux</span>
+                                <span class="skill-tag">Windows</span>
+                                <span class="skill-tag">macOS</span>
+                                <span class="skill-tag">Android</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <div class="skill-category-title">AI Platforms</div>
+                            <div class="skill-tags">
+                                <span class="skill-tag">ChatGPT</span>
+                                <span class="skill-tag">Claude</span>
+                                <span class="skill-tag">Gemini</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Languages</h2>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Hebrew:</strong> Native<br>
+                        <strong>English:</strong> Fluent<br>
+                        <strong>Portuguese:</strong> Basic
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Personal Info</h2>
+                    <div style="font-size: 0.9em; line-height: 1.8;">
+                        <strong>Citizenship:</strong> Israeli & Portuguese<br>
+                        <strong>Status:</strong> Married + 2<br>
+                        <strong>Born:</strong> 1987<br>
+                        <strong>License:</strong> A, B
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Military Service</h2>
+                    <div style="font-size: 0.9em; line-height: 1.7;">
+                        <strong>2006 - 2009</strong><br>
+                        Combat Intelligence<br>
+                        First Sergeant<br>
+                        <em>Platoon Sergeant, Company Sergeant, Team Commander</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch('https://api.rosilyo.net/visit')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('count').innerText = data.hits || "1";
+            })
+            .catch(err => {
+                console.error("API Error:", err);
+                document.getElementById('count').innerText = "Offline";
+            });
+    </script>
+</body>
+</html>
