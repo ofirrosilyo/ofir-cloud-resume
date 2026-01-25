@@ -5,5 +5,7 @@ resources:
   - deployment.yaml
   - services.yaml
   - redis-deployment.yaml
+  - api-deployment.yaml
   - redis-policy.yaml
   - tunnel-connector.yaml
+  - api-auth.yaml
