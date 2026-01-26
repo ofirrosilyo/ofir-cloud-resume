@@ -2,39 +2,33 @@
 
 ![Build Status](https://github.com/ofirrosilyo/ofir-cloud-resume/actions/workflows/k8s-validate.yaml/badge.svg)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Linkerd](https://img.shields.io/badge/Linkerd-00A2AA?style=for-the-badge&logo=Linkerd&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
-A production-grade, highly available personal resume website hosted on a private **K3s (Kubernetes)** cluster, secured by **Cloudflare Zero Trust**, and managed via **GitOps** principles.
+A production-grade, hardened personal resume ecosystem hosted on a private **K3s (Kubernetes)** cluster. This project demonstrates a **Zero-Trust** architecture utilizing a service mesh, granular network policies, and automated maintenance lifecycles.
+
+## 🛡️ Security & Hardening (Newly Implemented)
+This infrastructure follows a "Defense in Depth" strategy:
+* **Service Mesh (Linkerd):** Enforces **mutual TLS (mTLS)** for all pod-to-pod communication, ensuring data-in-transit encryption within the cluster.
+* **Layer 4 Firewalling:** Custom **Kubernetes Network Policies** implement a least-privilege model, restricting Redis access exclusively to the API and backup services.
+* **Zero Exposure:** Cloudflare Tunnels eliminate open inbound ports; traffic is only accessible via authenticated tunnels.
 
 ## 🏗️ Architecture Overview
-The infrastructure is designed for security and scalability, bypassing the need for open inbound ports or public IP exposure.
-
-
 
 * **Orchestration:** K3s (Lightweight Kubernetes)
-* **Networking:** Cloudflare Tunnel (Tunneling traffic from `rosilyo.net` to the cluster)
-* **Database:** Redis (State management for visitor tracking)
-* **Observability:** Loki-stack (Log aggregation)
-* **Security:** Cloudflare Access (Identity-based authentication for administrative routes)
+* **Mesh & Identity:** Linkerd Service Mesh
+* **Database:** Redis (StatefulSet with Persistent Volume Claims)
+* **Automated Backups:** Kubernetes CronJobs with mesh-aware lifecycle management (`shutdown-proxy-on-exit`).
+* **Observability:** Loki-stack & Grafana (Designing LogQL alerts for backup success/failure).
 
 ## 📂 Repository Structure
-Following industry-standard Kubernetes directory layouts:
-- `k8s/base/`: The "Source of Truth" for all cluster manifests.
-  - `deployment.yaml`: Pod definitions for Frontend and API.
-  - `services.yaml`: LoadBalancer and ClusterIP definitions.
-  - `kustomization.yaml`: Orchestrates the application of all manifests.
-  - `tunnel-connector.yaml`: Cloudflare sidecar configuration.
-
-## 🔄 GitOps Workflow
-This project utilizes a bidirectional sync between the master node and this repository:
-- **Push (k-save):** A custom alias that exports live cluster states to YAML and pushes to GitHub.
-- **Pull (Cron):** An automated background task (`git-sync.sh`) that pulls changes from GitHub to the node every 5 minutes.
+- `k8s/base/`: Core manifests.
+  - `components/api/`: Backend service logic and Linkerd injection.
+  - `components/redis/`: StatefulSet, Service, and Network Policies.
+  - `components/backups/`: CronJob definitions for database persistence.
+  - `tunnel-connector.yaml`: Cloudflare Zero Trust configuration.
 
 ## 🚀 Deployment
-To replicate this infrastructure on a clean K3s node:
 ```bash
-git clone https://github.com/ofirrosilyo/ofir-cloud-resume.git
 kubectl apply -k k8s/base/
-```
