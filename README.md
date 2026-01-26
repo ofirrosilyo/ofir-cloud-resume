@@ -41,3 +41,10 @@ graph TD
     User --> DNS
     DNS --> Modem
     VM --> API
+
+## 🛠️ Key Technical Features
+* **Bare-Metal Infrastructure:** Managed a full-stack deployment on a self-hosted **NAS**, utilizing an **Ubuntu VM** as a **K3s** node.
+* **Network Engineering:** Bypassed residential NAT using **Modem Bridge Mode** and **Cloudflare Tunnels** for secure, port-less public access.
+* **Zero-Trust Security:** Enforced **mTLS** (Mutual TLS) for all internal traffic via **Linkerd Service Mesh** and Layer 4 **NetworkPolicies**.
+* **Automated Persistence:** Implemented **Kubernetes CronJobs** for daily Redis backups with automated sidecar lifecycle management.
+* **Full-Stack Observability:** Built real-time monitoring using the **Loki-stack**, with custom **Grafana** dashboards for log aggregation and metric visualization.
