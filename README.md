@@ -1,6 +1,6 @@
 # Cloud-Native Resume Infrastructure 🚀
 
-[![Build Status](https://github.com/ofirrosilyo/ofir-cloud-resume/.github/workflows/deploy.yaml/badge.svg)](https://github.com/ofirrosilyo/ofir-cloud-resume/actions)
+[![Build Status](https://github.com/ofirrosilyo/ofir-cloud-resume/actions/workflows/deploy.yaml/badge.svg)](https://github.com/ofirrosilyo/ofir-cloud-resume/actions)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Linkerd](https://img.shields.io/badge/Linkerd-00A2AA?style=for-the-badge&logo=Linkerd&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
