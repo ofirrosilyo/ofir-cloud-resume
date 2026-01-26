@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: redis-backup
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            role: redis-backup
+          annotations:
+            linkerd.io/inject: enabled
+            linkerd.io/shutdown-proxy-on-exit: "true"
+        spec:
+          serviceAccountName: redis-backup-sa
+          containers:
+          - name: redis-backup
+            image: redis:alpine
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "⏳ Waiting for Linkerd proxy to initialize..."
+              sleep 3
+              for i in $(seq 1 10); do
+                echo "Attempt $i: Pinging Redis..."
+                if redis-cli -h redis-db PING > /dev/null 2>&1; then
+                  echo "✅ Connected! Saving..."
+                  redis-cli -h redis-db SAVE
+                  exit 0
+                fi
+                sleep 2
+              done
+              echo "❌ Failed to connect."
+              exit 1
+          restartPolicy: OnFailure
