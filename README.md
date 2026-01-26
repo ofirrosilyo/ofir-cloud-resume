@@ -4,44 +4,40 @@
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Linkerd](https://img.shields.io/badge/Linkerd-00A2AA?style=for-the-badge&logo=Linkerd&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
-A production-grade, hardened personal resume ecosystem hosted on a private **K3s (Kubernetes)** cluster.
+A production-grade, hardened personal resume ecosystem hosted on a private **K3s (Kubernetes)** cluster. This project demonstrates a **Zero-Trust** architecture utilizing a service mesh, granular network policies, and automated maintenance lifecycles.
 
 ## 🏗️ Architecture Overview
 
 ```mermaid
-graph TD
-    subgraph Public_Internet
-        User((User))
+graph LR
+    subgraph External
+        Internet((Internet))
+        CF[Cloudflare Tunnel]
     end
 
-    subgraph Cloudflare_Zero_Trust
-        Tunnel[Cloudflare Tunnel]
-        Access[Cloudflare Access]
-    end
-
-    subgraph K3s_Cluster_Private_Network
+    subgraph Cluster ["K3s Cluster (Private Node)"]
         direction TB
-        subgraph Mesh_mTLS_Encryption
-            Proxy_API[Linkerd Proxy]
-            Proxy_Redis[Linkerd Proxy]
+        subgraph Mesh ["Linkerd Service Mesh (mTLS)"]
+            API[Resume API Pod]
+            Redis[(Redis StatefulSet)]
         end
 
-        API[Resume API Pod]
-        Redis[(Redis StatefulSet)]
-        Backup[CronJob Backup]
-        
-        User --> Tunnel
-        Tunnel --> API
-        
-        API -.-> Proxy_API
-        Proxy_API -- "mTLS (Encrypted)" --> Proxy_Redis
-        Proxy_Redis -.-> Redis
-        
-        Backup -- "SAVE" --> Redis
+        Cron[Backup CronJob]
+        PVC[[Persistent Volume]]
+        NetPol{Network Policy}
+
+        Internet --> CF
+        CF --> API
+        API -- "Authorized Port 6379" --> NetPol
+        NetPol --> Redis
+        Redis <--> PVC
+        Cron -- "SAVE Command" --> Redis
     end
 
-    subgraph Observability
+    subgraph Monitoring
         Loki[(Loki Stack)]
-        Grafana[Grafana Dashboards]
+        Grafana[Grafana Dashboard]
+        Loki --> Grafana
     end
