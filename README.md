@@ -11,33 +11,33 @@ A production-grade, hardened personal resume ecosystem hosted on a private **K3s
 ## 🏗️ Architecture Overview
 
 ```mermaid
-graph LR
-    subgraph External
-        Internet((Internet))
-        CF[Cloudflare Tunnel]
+graph TD
+    subgraph Public_Internet ["Public Internet"]
+        User((User))
+        DNS[Domain: rosilyo.net]
     end
 
-    subgraph Cluster ["K3s Cluster (Private Node)"]
+    subgraph Home_Network_Physical ["Home Network (Physical)"]
         direction TB
-        subgraph Mesh ["Linkerd Service Mesh (mTLS)"]
-            API[Resume API Pod]
-            Redis[(Redis StatefulSet)]
-        end
-
-        Cron[Backup CronJob]
-        PVC[[Persistent Volume]]
-        NetPol{Network Policy}
-
-        Internet --> CF
-        CF --> API
-        API -- "Authorized Port 6379" --> NetPol
-        NetPol --> Redis
-        Redis <--> PVC
-        Cron -- "SAVE Command" --> Redis
+        Modem[Modem: Bridge Mode]
+        Router[Router: Port Forwarding/Tunnel]
+        NAS[NAS: Hardware Host]
+        VM[K3s VM: Ubuntu 22.04]
+        
+        Modem --> Router
+        Router --> NAS
+        NAS --> VM
     end
 
-    subgraph Monitoring
-        Loki[(Loki Stack)]
-        Grafana[Grafana Dashboard]
-        Loki --> Grafana
+    subgraph K3s_Logic ["Kubernetes Logic (Software)"]
+        direction TB
+        API[Resume API Pod]
+        Redis[(Redis StatefulSet)]
+        Mesh{Linkerd mTLS}
+        
+        API --- Mesh --- Redis
     end
+
+    User --> DNS
+    DNS --> Modem
+    VM --> API
